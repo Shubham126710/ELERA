@@ -94,3 +94,34 @@ Includes an end‑to‑end auth → courses → quiz integration test (`tests/au
 - Mastery updates use an EWMA; alpha varies by assessment mode.
 - Frontend environment variable: `VITE_API_BASE` (see `package.json` scripts) pins API host.
 - Expand the UI as needed; endpoints are mounted under `/api/*` in `server.js`.
+
+## Deploying to Netlify (Vite + React)
+
+This repo is a monorepo; the frontend lives in `frontend/` and is built with Vite (outputs to `frontend/dist`). We've added a `netlify.toml` at the repo root so Netlify builds the right subfolder and publishes the correct directory.
+
+What Netlify uses:
+
+- Build command: `npm ci && npm --prefix frontend run build`
+- Publish directory: `frontend/dist`
+- Node version: 20
+
+Single‑page app routing:
+
+- We included `frontend/public/_redirects` with:
+  
+  `/* /index.html 200`
+  
+  This ensures client‑side routing (if added later) works by serving `index.html` for any route.
+
+Environment variables:
+
+- Vite uses the `VITE_` prefix. Set this in Netlify → Site settings → Environment variables:
+  
+  `VITE_API_BASE=https://<your-backend-host>`
+  
+  If you leave it unset, the app will call relative `/api/...` paths on the same origin.
+
+Troubleshooting blank screen on Netlify:
+
+- Make sure Netlify is publishing `frontend/dist`, not the raw `frontend/` folder. If the raw source is published, the HTML will reference `/src/main.jsx` which doesn’t exist in production, leading to a blank page.
+- Check the browser console for 404s on JS assets or CORS errors.
