@@ -125,3 +125,42 @@ Troubleshooting blank screen on Netlify:
 
 - Make sure Netlify is publishing `frontend/dist`, not the raw `frontend/` folder. If the raw source is published, the HTML will reference `/src/main.jsx` which doesn’t exist in production, leading to a blank page.
 - Check the browser console for 404s on JS assets or CORS errors.
+
+## Deploying the Backend to Render
+
+You can deploy the Node/Express backend quickly using Render. A `render.yaml` blueprint is included at the repo root.
+
+### Steps
+1. Push the latest commits so `render.yaml` is in `main`.
+2. Log in to Render and choose New + Blueprint.
+3. Point to your GitHub repo (main branch). Render will parse `render.yaml`.
+4. Accept defaults or choose the free plan for the `elera-backend` service.
+5. Environment variables automatically provisioned:
+  - `JWT_SECRET` (auto‑generated)
+  - (Optional) Add `MONGO_URI` if you want persistent storage (Mongo Atlas or Render Mongo service). If omitted, the server falls back to the in‑memory Mongo for demo behavior—data resets on each deploy.
+6. Deploy; note the generated service URL like: `https://elera-backend.onrender.com`
+
+### After Deploy
+- Health check: curl the root: `curl https://elera-backend.onrender.com/` → `Adaptive Learning API Running ✅`
+- Auth endpoints will be at `https://elera-backend.onrender.com/api/auth/login` etc.
+
+## Connecting Frontend (Netlify) to Backend (Render)
+
+Set the frontend env var so API calls hit the live backend:
+
+Netlify → Site settings → Environment variables:
+
+`VITE_API_BASE=https://elera-backend.onrender.com`
+
+Redeploy the site or trigger a new build. The React app now uses absolute URLs for all fetch calls.
+
+### Verify End‑to‑End
+1. Open the Netlify site.
+2. Sign up or login (demo account still works if seeded questions exist on backend).
+3. Open DevTools Network tab; requests should go to the Render domain.
+4. If CORS errors appear, ensure backend has `cors()` (already configured in `server.js`).
+
+### Common Issues
+- Blank responses: Check backend logs in Render dashboard.
+- 404 on `/api/...`: Backend still warming or deploy failed—retry after a minute.
+- In‑memory Mongo lost data: Provide a persistent `MONGO_URI` so data survives restarts.

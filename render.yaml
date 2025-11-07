@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: elera-backend
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm ci
+    startCommand: npm start
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: JWT_SECRET
+        generateValue: true
+      # Optional: Set MONGO_URI to a persistent MongoDB (Atlas/Render add‑on).
+      # If omitted, the app will run using an in‑memory Mongo for demo/testing.
+      # - key: MONGO_URI
+      #   value: "mongodb+srv://<user>:<pass>@<cluster>/<db>?retryWrites=true&w=majority"
