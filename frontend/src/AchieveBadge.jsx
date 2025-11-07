@@ -1,0 +1,17 @@
+import React from 'react'
+
+// Animated achievement badge (Uiverse-inspired), scoped and themed
+// Props: size (px), ariaLabel
+export default function AchieveBadge({ size = 150, ariaLabel = 'Achievement badge' }) {
+  const style = { ['--achv-size']: `${size}px` }
+  return (
+    <div className="achievement" style={style} aria-label={ariaLabel} role="img">
+      <svg className="achv-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+        <path d="M62.11,53.93c22.582-3.125,22.304-23.471,18.152-29.929-4.166-6.444-10.36-2.153-10.36-2.153v-4.166H30.099v4.166s-6.194-4.291-10.36,2.153c-4.152,6.458-4.43,26.804,18.152,29.929l5.236,7.777v8.249s-.944,4.597-4.833,4.986c-3.903,.389-7.791,4.028-7.791,7.374h38.997c0-3.347-3.889-6.986-7.791-7.374-3.889-.389-4.833-4.986-4.833-4.986v-8.249l5.236-7.777Zm7.388-24.818s2.833-3.097,5.111-1.347c2.292,1.75,2.292,15.86-8.999,18.138l3.889-16.791Zm-44.108-1.347c2.278-1.75,5.111,1.347,5.111,1.347l3.889,16.791c-11.291-2.278-11.291-16.388-8.999-18.138Z"/>
+      </svg>
+      <div className="achievement__star">
+        <div className="star-eight" />
+      </div>
+    </div>
+  )
+}

@@ -1,0 +1,16 @@
+{
+  "name": "elera-dev",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k -n API,WEB -c green,cyan \"npm --prefix backend run dev:5050\" \"npm --prefix frontend run dev:api5050\"",
+    "backend": "npm --prefix backend run dev:5050",
+    "frontend": "npm --prefix frontend run dev:api5050",
+    "start:backend": "npm --prefix backend start",
+    "start:frontend": "npm --prefix frontend run build && npm --prefix frontend run preview"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}

@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  mongo:
+    image: mongo:6
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+  api:
+    build: ./backend
+    depends_on:
+      - mongo
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://mongo:27017/elera
+      - JWT_SECRET=devsecret
+    ports:
+      - "5000:5000"
+    command: ["node", "server.js"]
+  # frontend can be added later; using dev server locally during development
+volumes:
+  mongo_data:
